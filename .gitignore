@@ -1,0 +1,14 @@
+node_modules/
+# Google OAuth / local credentials (never commit)
+client_secret*.json
+*credentials*.json
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+dist/
+build/
+coverage/
+.vscode/
+.idea/

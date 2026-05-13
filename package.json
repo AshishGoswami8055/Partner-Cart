@@ -1,0 +1,14 @@
+{
+  "name": "partner-cart",
+  "private": true,
+  "version": "1.0.0",
+  "description": "PartnerCart — production-grade multi-vendor MERN marketplace",
+  "scripts": {
+    "install:all": "npm --prefix server install && npm --prefix client install",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "seed": "npm --prefix server run seed",
+    "seed-database": "node seed-database.js",
+    "build:client": "npm --prefix client run build"
+  }
+}

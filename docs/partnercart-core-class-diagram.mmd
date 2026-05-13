@@ -1,0 +1,79 @@
+%% PartnerCart — minimal accurate core UML (class diagram)
+%% Open in https://mermaid.live or use Mermaid preview in VS Code
+
+classDiagram
+  direction TB
+
+  class User {
+    +id
+    +email
+    +role
+  }
+
+  class Vendor {
+    +id
+    +storeName
+    +slug
+    +userId
+  }
+
+  class Category {
+    +id
+    +name
+    +slug
+    +parentId
+  }
+
+  class Product {
+    +id
+    +title
+    +slug
+    +price
+    +vendorId
+    +categoryId
+  }
+
+  class Cart {
+    <<at most one per User>>
+    +id
+    +userId
+  }
+
+  class Order {
+    +id
+    +orderNumber
+    +customerId
+  }
+
+  class OrderGroup {
+    <<embedded in Order>>
+    +id
+    +vendorId
+    +status
+  }
+
+  class OrderItem {
+    <<embedded in OrderGroup>>
+    +productId
+    +quantity
+    +price
+  }
+
+  %% Vendor profile: optional for a user; each vendor account belongs to exactly one user
+  User "0..1" --> "1" Vendor : vendor profile
+
+  %% Catalog
+  Vendor "1" --> "*" Product : lists
+  Category "1" --> "*" Product : classifies
+  Category "0..1" --> "*" Category : parent
+
+  %% Shopping cart (lines are embedded in MongoDB; dashed = snapshot refs to Product/Vendor)
+  User "1" --> "0..1" Cart : owns
+  Cart ..> Product : cart line refs product
+  Cart ..> Vendor : cart line refs vendor
+
+  %% Orders: customer places many; split by vendor inside document
+  User "1" --> "*" Order : customer
+  Order *-- "1..*" OrderGroup : contains
+  OrderGroup *-- "1..*" OrderItem : contains
+  OrderItem "*" --> "1" Product : line item

@@ -1,0 +1,147 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Strict black-and-white system. Pure white surfaces, near-black ink,
+       a single set of grays for borders and secondary text. */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 6%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 6%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 42%;
+
+    --primary: 0 0% 6%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 0 0% 6%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 50% 32%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 32 90% 45%;
+    --warning-foreground: 0 0% 100%;
+
+    --info: 215 55% 38%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 88%;
+    --ring: 0 0% 6%;
+
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 98%;
+
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 64%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 6%;
+
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 0 0% 98%;
+
+    --accent: 0 0% 98%;
+    --accent-foreground: 0 0% 6%;
+
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 152 50% 50%;
+    --success-foreground: 0 0% 6%;
+
+    --warning: 32 90% 60%;
+    --warning-foreground: 0 0% 6%;
+
+    --info: 215 65% 60%;
+    --info-foreground: 0 0% 6%;
+
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 0 0% 98%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-feature-settings: 'cv11', 'ss01';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background-color: hsl(var(--foreground));
+    color: hsl(var(--background));
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground;
+  }
+  .rule {
+    @apply h-px w-full bg-border;
+  }
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  .scrollbar-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.25);
+    border-radius: 8px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.4);
+  }
+  .link {
+    @apply relative inline-flex items-center gap-1 text-foreground;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 100% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size .25s ease;
+  }
+  .link:hover { background-size: 0% 1px; }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+  .grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .display-serif {
+    font-family: 'Fraunces', 'Source Serif Pro', Georgia, serif;
+    font-feature-settings: 'ss01', 'ss02';
+    letter-spacing: -0.02em;
+  }
+  .display-serif em, .display-serif i {
+    font-style: italic;
+    font-variation-settings: 'opsz' 144, 'SOFT' 80;
+  }
+}
