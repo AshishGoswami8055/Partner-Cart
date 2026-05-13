@@ -9,6 +9,25 @@ const required = (key, fallback) => {
   return value;
 };
 
+const trimTrailingSlash = (s) => String(s || '').replace(/\/+$/, '');
+
+/** Public browser-facing API origin (no trailing slash). Used when GOOGLE_CALLBACK_URL is unset. */
+const resolvePublicApiOrigin = () => {
+  if (process.env.API_PUBLIC_URL) return trimTrailingSlash(process.env.API_PUBLIC_URL);
+  // Render injects this for web services — avoids accidental localhost callback in production.
+  if (process.env.RENDER_EXTERNAL_URL) return trimTrailingSlash(process.env.RENDER_EXTERNAL_URL);
+  return '';
+};
+
+const resolveGoogleCallbackUrl = () => {
+  if (process.env.GOOGLE_CALLBACK_URL) return process.env.GOOGLE_CALLBACK_URL;
+  const publicApi = resolvePublicApiOrigin();
+  if (publicApi) return `${publicApi}/api/v1/auth/google/callback`;
+  return 'http://localhost:5000/api/v1/auth/google/callback';
+};
+
+const clientOrigin = trimTrailingSlash(process.env.CLIENT_ORIGIN || 'http://localhost:5173');
+
 export const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
   isProd: process.env.NODE_ENV === 'production',
@@ -28,22 +47,18 @@ export const env = {
     secure: process.env.COOKIE_SECURE === 'true',
   },
 
-  clientOrigin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+  clientOrigin,
 
   google: {
     clientId: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    callbackUrl:
-      process.env.GOOGLE_CALLBACK_URL ||
-      'http://localhost:5000/api/v1/auth/google/callback',
+    callbackUrl: resolveGoogleCallbackUrl(),
   },
 
   oauth: {
-    successRedirect:
-      process.env.OAUTH_SUCCESS_REDIRECT || 'http://localhost:5173/auth/callback',
+    successRedirect: process.env.OAUTH_SUCCESS_REDIRECT || `${clientOrigin}/auth/callback`,
     failureRedirect:
-      process.env.OAUTH_FAILURE_REDIRECT ||
-      'http://localhost:5173/auth/login?oauth=failed',
+      process.env.OAUTH_FAILURE_REDIRECT || `${clientOrigin}/auth/login?oauth=failed`,
   },
 
   cloudinary: {
